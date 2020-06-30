@@ -3,8 +3,8 @@
 namespace TestPD{
     class Program{
         static void Main(string[] args){
-            string myString = "Hello";
-            Console.WriteLine(myString.IndexOf("lll"));
+            ProceduralDungeon d = new ProceduralDungeon(5, 5);
+            _ = d.Dungeon;
         }
     }
 }
