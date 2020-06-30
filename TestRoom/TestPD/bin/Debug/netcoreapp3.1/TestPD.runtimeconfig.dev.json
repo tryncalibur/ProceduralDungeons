@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\AlterTryn\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\AlterTryn\\.nuget\\packages"
+    ]
+  }
+}

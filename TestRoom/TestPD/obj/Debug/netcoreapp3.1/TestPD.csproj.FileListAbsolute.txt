@@ -1,0 +1,13 @@
+C:\GitRepo\ProceduralDungeons\TestRoom\TestPD\bin\Debug\netcoreapp3.1\TestPD.exe
+C:\GitRepo\ProceduralDungeons\TestRoom\TestPD\bin\Debug\netcoreapp3.1\TestPD.deps.json
+C:\GitRepo\ProceduralDungeons\TestRoom\TestPD\bin\Debug\netcoreapp3.1\TestPD.runtimeconfig.json
+C:\GitRepo\ProceduralDungeons\TestRoom\TestPD\bin\Debug\netcoreapp3.1\TestPD.runtimeconfig.dev.json
+C:\GitRepo\ProceduralDungeons\TestRoom\TestPD\bin\Debug\netcoreapp3.1\TestPD.dll
+C:\GitRepo\ProceduralDungeons\TestRoom\TestPD\bin\Debug\netcoreapp3.1\TestPD.pdb
+C:\GitRepo\ProceduralDungeons\TestRoom\TestPD\obj\Debug\netcoreapp3.1\TestPD.csprojAssemblyReference.cache
+C:\GitRepo\ProceduralDungeons\TestRoom\TestPD\obj\Debug\netcoreapp3.1\TestPD.AssemblyInfoInputs.cache
+C:\GitRepo\ProceduralDungeons\TestRoom\TestPD\obj\Debug\netcoreapp3.1\TestPD.AssemblyInfo.cs
+C:\GitRepo\ProceduralDungeons\TestRoom\TestPD\obj\Debug\netcoreapp3.1\TestPD.csproj.CoreCompileInputs.cache
+C:\GitRepo\ProceduralDungeons\TestRoom\TestPD\obj\Debug\netcoreapp3.1\TestPD.dll
+C:\GitRepo\ProceduralDungeons\TestRoom\TestPD\obj\Debug\netcoreapp3.1\TestPD.pdb
+C:\GitRepo\ProceduralDungeons\TestRoom\TestPD\obj\Debug\netcoreapp3.1\TestPD.genruntimeconfig.cache
