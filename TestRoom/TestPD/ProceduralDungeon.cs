@@ -21,10 +21,10 @@ public class ProceduralDungeon
         { get; set; }
         public room()
         {
-            Up = rnd.Next(2) == 1;
-            Down = rnd.Next(2) == 1;
-            Left = rnd.Next(2) == 1;
-            Right = rnd.Next(2) == 1;
+            Up = rnd.Next(3) == 1;
+            Down = rnd.Next(3) == 1;
+            Left = rnd.Next(3) == 1;
+            Right = rnd.Next(3) == 1;
             Status = 0;
         }
     }
@@ -68,10 +68,10 @@ public class ProceduralDungeon
         {
             for (int j = 0; j < c; ++j)
             {
-                if (Dungeon[i, j].Up) Dungeon[r - 1, c].Down = true;
-                if (Dungeon[i, j].Down) Dungeon[r + 1, c].Up = true;
-                if (Dungeon[i, j].Left) Dungeon[r, c - 1].Right = true;
-                if (Dungeon[i, j].Right) Dungeon[r, c + 1].Left = true;
+                if (Dungeon[i, j].Up) Dungeon[i - 1, j].Down = true;
+                if (Dungeon[i, j].Down) Dungeon[i + 1, j].Up = true;
+                if (Dungeon[i, j].Left) Dungeon[i, j - 1].Right = true;
+                if (Dungeon[i, j].Right) Dungeon[i, j + 1].Left = true;
             }
         }
     }
@@ -91,7 +91,7 @@ public class ProceduralDungeon
             {
                 if (Dungeon[i, j].Left) Console.Write("-0");
                 else Console.Write(" 0");
-                if (Dungeon[i, j].Left) Console.Write("-");
+                if (Dungeon[i, j].Right) Console.Write("-");
                 else Console.Write(" ");
             }
             Console.Write("\n");
