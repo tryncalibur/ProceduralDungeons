@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom.Compiler;
+using System.Runtime.InteropServices;
 
 public class ProceduralDungeon
 {
@@ -19,13 +20,18 @@ public class ProceduralDungeon
 
         public char Status
         { get; set; }
+
+        public int Visit
+        { get; set; }
+
         public room()
         {
             Up = rnd.Next(3) == 1;
             Down = rnd.Next(3) == 1;
             Left = rnd.Next(3) == 1;
             Right = rnd.Next(3) == 1;
-            Status = '0';
+            Status = 'O';
+            Visit = 0;
         }
     }
 
@@ -109,8 +115,16 @@ public class ProceduralDungeon
 
             for (int j = 0; j < NumCol; ++j)
             {
-                if (Dungeon[i, j].Left) Console.Write($"-{Dungeon[i,j].Status}");
-                else Console.Write($" {Dungeon[i, j].Status}");
+                if ((i == StartRow && j == StartCol) || (i == EndRow && j == EndCol))
+                {
+                    if (Dungeon[i, j].Left) Console.Write($"-{Dungeon[i, j].Status}");
+                    else Console.Write($" {Dungeon[i, j].Status}");
+                }
+                else
+                {
+                    if (Dungeon[i, j].Left) Console.Write($"-{Dungeon[i, j].Visit}");
+                    else Console.Write($" {Dungeon[i, j].Visit}");
+                }
                 if (Dungeon[i, j].Right) Console.Write("-");
                 else Console.Write(" ");
             }
@@ -122,6 +136,40 @@ public class ProceduralDungeon
                 else Console.Write("   ");
             }
             Console.Write("\n");
+        }
+    }
+    
+    // Find connected blocks of dungeon
+    private bool search(int r, int c, int Mark)
+    {
+        room CurrentRoom = Dungeon[r, c];
+        bool ReturnVal = false;
+
+        // Room is already visited
+        if (CurrentRoom.Visit != 0) return false;
+       
+        // End Room found
+        if (CurrentRoom.Status == 'E') ReturnVal = true;
+
+        // Search Other Rooms
+        CurrentRoom.Visit = Mark;
+        if (CurrentRoom.Up)    ReturnVal |= search(r - 1, c, Mark);
+        if (CurrentRoom.Down)  ReturnVal |= search(r + 1, c, Mark);
+        if (CurrentRoom.Left)  ReturnVal |= search(r, c - 1, Mark);
+        if (CurrentRoom.Right) ReturnVal |= search(r, c + 1, Mark);
+
+        return ReturnVal;
+    }
+
+    // Clear Visit marks
+    private void clearSearch()
+    {
+        for (int i = 0; i < NumRow; ++i)
+        {
+            for (int j = 0; j < NumCol; ++j)
+            {
+                Dungeon[i, j].Visit = 0;
+            }
         }
     }
 }
