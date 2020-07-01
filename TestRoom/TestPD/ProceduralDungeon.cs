@@ -17,7 +17,7 @@ public class ProceduralDungeon
         public bool Right
         { get; set; }
 
-        int Status
+        public char Status
         { get; set; }
         public room()
         {
@@ -25,7 +25,7 @@ public class ProceduralDungeon
             Down = rnd.Next(3) == 1;
             Left = rnd.Next(3) == 1;
             Right = rnd.Next(3) == 1;
-            Status = 0;
+            Status = '0';
         }
     }
 
@@ -35,6 +35,10 @@ public class ProceduralDungeon
     {get;}
     private int NumRow;
     private int NumCol;
+    private int StartRow;
+    private int StartCol;
+    private int EndRow;
+    private int EndCol;
 
     public ProceduralDungeon(int r = 5, int c = 5)
     {
@@ -63,6 +67,22 @@ public class ProceduralDungeon
             Dungeon[r-1, i].Down = false;
         }
 
+        // Set Start/End
+        Random rnd = new Random();
+        StartRow = rnd.Next(r);
+        StartCol = rnd.Next(c);
+        Dungeon[StartRow, StartCol].Status = 'S';
+        while (true)
+        {
+            EndRow = rnd.Next(r);
+            EndCol = rnd.Next(c);
+            if (StartRow != EndRow || StartCol != EndCol)
+            {
+                Dungeon[EndRow, EndCol].Status = 'E';
+                break;
+            }
+        }
+
         // Connect rooms based on entrances
         for (int i = 0; i < r; ++i)
         {
@@ -89,8 +109,8 @@ public class ProceduralDungeon
 
             for (int j = 0; j < NumCol; ++j)
             {
-                if (Dungeon[i, j].Left) Console.Write("-0");
-                else Console.Write(" 0");
+                if (Dungeon[i, j].Left) Console.Write($"-{Dungeon[i,j].Status}");
+                else Console.Write($" {Dungeon[i, j].Status}");
                 if (Dungeon[i, j].Right) Console.Write("-");
                 else Console.Write(" ");
             }
