@@ -100,6 +100,17 @@ public class ProceduralDungeon
                 if (Dungeon[i, j].Right) Dungeon[i, j + 1].Left = true;
             }
         }
+
+        // Determine number of independent blocks
+        int SearchNum = 1;
+        Search(StartRow, StartCol, SearchNum);
+        for (int i = 0; i < r; ++i)
+        {
+            for (int j = 0; j < c; ++j)
+            {
+                if (Dungeon[i, j].Visit == 0) Search(i, j, ++SearchNum);
+            }
+        }
     }
 
     public void PrintPD()
@@ -140,7 +151,7 @@ public class ProceduralDungeon
     }
     
     // Find connected blocks of dungeon
-    private bool search(int r, int c, int Mark)
+    private bool Search(int r, int c, int Mark)
     {
         room CurrentRoom = Dungeon[r, c];
         bool ReturnVal = false;
@@ -153,16 +164,16 @@ public class ProceduralDungeon
 
         // Search Other Rooms
         CurrentRoom.Visit = Mark;
-        if (CurrentRoom.Up)    ReturnVal |= search(r - 1, c, Mark);
-        if (CurrentRoom.Down)  ReturnVal |= search(r + 1, c, Mark);
-        if (CurrentRoom.Left)  ReturnVal |= search(r, c - 1, Mark);
-        if (CurrentRoom.Right) ReturnVal |= search(r, c + 1, Mark);
+        if (CurrentRoom.Up)    ReturnVal |= Search(r - 1, c, Mark);
+        if (CurrentRoom.Down)  ReturnVal |= Search(r + 1, c, Mark);
+        if (CurrentRoom.Left)  ReturnVal |= Search(r, c - 1, Mark);
+        if (CurrentRoom.Right) ReturnVal |= Search(r, c + 1, Mark);
 
         return ReturnVal;
     }
 
     // Clear Visit marks
-    private void clearSearch()
+    private void ClearSearch()
     {
         for (int i = 0; i < NumRow; ++i)
         {
