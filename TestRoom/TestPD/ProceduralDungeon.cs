@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 public class ProceduralDungeon
@@ -38,13 +39,16 @@ public class ProceduralDungeon
 
 
     public room[,] Dungeon
-    {get;}
+    { get; }
     private int NumRow;
     private int NumCol;
     private int StartRow;
     private int StartCol;
     private int EndRow;
     private int EndCol;
+
+    private List<List<Tuple<int, int>>> BlockList = new List<List<Tuple<int, int>>>();
+    private List<Tuple<int, int>> Temp = new List<Tuple<int, int>>();
 
     public ProceduralDungeon(int r = 5, int c = 5)
     {
@@ -103,13 +107,29 @@ public class ProceduralDungeon
 
         // Determine number of independent blocks
         int SearchNum = 1;
-        Search(StartRow, StartCol, SearchNum);
-        for (int i = 0; i < r; ++i)
+        while (Search(StartRow, StartCol, SearchNum))
         {
-            for (int j = 0; j < c; ++j)
+            Temp.Clear();
+             
+            // Mark Blocks
+            for (int i = 0; i < r; ++i)
             {
-                if (Dungeon[i, j].Visit == 0) Search(i, j, ++SearchNum);
+                for (int j = 0; j < c; ++j)
+                {
+                    if (Dungeon[i, j].Visit == 0)
+                    {
+                        Search(i, j, ++SearchNum);
+                        BlockList.Add(Temp);
+                        Temp.Clear();
+                    }
+                }
             }
+            
+
+            // Clear Blocks
+            ClearSearch();
+            BlockList.Clear();
+            SearchNum = 1;
         }
     }
 
@@ -161,6 +181,8 @@ public class ProceduralDungeon
        
         // End Room found
         if (CurrentRoom.Status == 'E') ReturnVal = true;
+
+        Temp.Add(new Tuple<int, int>(r, c));
 
         // Search Other Rooms
         CurrentRoom.Visit = Mark;
