@@ -36,6 +36,25 @@ public class ProceduralDungeon
         }
     }
 
+    public class Path
+    {
+        public Tuple<int, int> Coord
+        { get; set; }
+        public int Direction
+        { get; set; }
+
+        public Path(int r, int c, int D)
+        {
+            Coord = new Tuple<int, int>(r, c);
+            Direction = D;
+        }
+        public Path(Tuple<int, int> t, int D)
+        {
+            Coord = t;
+            Direction = D;
+        }
+    }
+
 
 
     public room[,] Dungeon
@@ -107,7 +126,7 @@ public class ProceduralDungeon
 
         // Determine number of independent blocks
         int SearchNum = 1;
-        while (Search(StartRow, StartCol, SearchNum))
+        while (!Search(StartRow, StartCol, SearchNum))
         {
             Temp.Clear();
              
@@ -120,7 +139,77 @@ public class ProceduralDungeon
                     {
                         Search(i, j, ++SearchNum);
                         BlockList.Add(Temp);
-                        Temp.Clear();
+                        Temp = new List<Tuple<int, int>>();
+                    }
+                }
+            }
+
+
+            // Connect Blocks (Priorty to start)
+            foreach (List<Tuple<int, int>> Block in BlockList)
+            {
+                var ConnectOrigin = new List<Path>();
+                var ConnectDiff = new List<Path>();
+                
+                foreach(Tuple<int, int> Room in Block)
+                {
+                    int Row = Room.Item1;
+                    int Col = Room.Item2;
+
+                    if ((Row != 0) && !(Dungeon[Row, Col].Up) && (Dungeon[Row, Col].Visit != Dungeon[Row-1, Col].Visit))
+                    {
+                        if (Dungeon[Row - 1, Col].Visit == 1) ConnectOrigin.Add(new Path(Room, 1));
+                        else ConnectDiff.Add(new Path(Room, 1));
+                    }
+
+                    if ((Row != r-1) && !(Dungeon[Row, Col].Down) && (Dungeon[Row, Col].Visit != Dungeon[Row+1, Col].Visit))
+                    {
+                        if (Dungeon[Row + 1, Col].Visit == 1) ConnectOrigin.Add(new Path(Room, 2));
+                        else ConnectDiff.Add(new Path(Room, 2));
+                    }
+
+                    if ((Col != 0) && !(Dungeon[Row, Col].Left) && (Dungeon[Row, Col].Visit != Dungeon[Row, Col-1].Visit))
+                    {
+                        if (Dungeon[Row, Col - 1].Visit == 1) ConnectOrigin.Add(new Path(Room, 3));
+                        else ConnectDiff.Add(new Path(Room, 3));
+                    }
+
+                    if ((Col != c-1) && !(Dungeon[Row, Col].Down) && (Dungeon[Row, Col].Visit != Dungeon[Row, Col+1].Visit))
+                    {
+                        if (Dungeon[Row, Col + 1].Visit == 1) ConnectOrigin.Add(new Path(Room, 4));
+                        else ConnectDiff.Add(new Path(Room, 4));
+                    }
+                }
+
+                // Determine Type of correction
+                if (ConnectDiff.Count != 0 || ConnectOrigin.Count != 0)
+                {
+                    Path MakeConnect = new Path(-1, -1, -1);
+                    if (ConnectDiff.Count != 0) MakeConnect = ConnectDiff[rnd.Next(ConnectDiff.Count)];
+                    if (ConnectOrigin.Count != 0) MakeConnect = ConnectOrigin[rnd.Next(ConnectOrigin.Count)];
+
+                    // Connect two blocks
+                    switch (MakeConnect.Direction)
+                    {
+                        case 1:
+                            Dungeon[MakeConnect.Coord.Item1, MakeConnect.Coord.Item2].Up = true;
+                            Dungeon[MakeConnect.Coord.Item1 - 1, MakeConnect.Coord.Item2].Down = true;
+                            break;
+                        case 2:
+                            Dungeon[MakeConnect.Coord.Item1, MakeConnect.Coord.Item2].Down = true;
+                            Dungeon[MakeConnect.Coord.Item1 + 1, MakeConnect.Coord.Item2].Up = true;
+                            break;
+                        case 3:
+                            Dungeon[MakeConnect.Coord.Item1, MakeConnect.Coord.Item2].Left = true;
+                            Dungeon[MakeConnect.Coord.Item1, MakeConnect.Coord.Item2 - 1].Right = true;
+                            break;
+                        case 4:
+                            Dungeon[MakeConnect.Coord.Item1, MakeConnect.Coord.Item2].Right = true;
+                            Dungeon[MakeConnect.Coord.Item1, MakeConnect.Coord.Item2 + 1].Left = true;
+                            break;
+                        default:
+                            Console.WriteLine("Undefine Direction");
+                            break;
                     }
                 }
             }
