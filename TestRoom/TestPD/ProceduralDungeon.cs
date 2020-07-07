@@ -27,10 +27,10 @@ public class ProceduralDungeon
 
         public room()
         {
-            Up = rnd.Next(3) == 1;
-            Down = rnd.Next(3) == 1;
-            Left = rnd.Next(3) == 1;
-            Right = rnd.Next(3) == 1;
+            Up = rnd.Next(4) == 0;
+            Down = rnd.Next(4) == 0;
+            Left = rnd.Next(4) == 0;
+            Right = rnd.Next(4) == 0;
             Status = 'O';
             Visit = 0;
         }
@@ -126,10 +126,11 @@ public class ProceduralDungeon
 
         // Determine number of independent blocks
         int SearchNum = 1;
-        while (!Search(StartRow, StartCol, SearchNum))
+        Search(StartRow, StartCol, SearchNum);
+        do
         {
             Temp.Clear();
-             
+
             // Mark Blocks
             for (int i = 0; i < r; ++i)
             {
@@ -144,37 +145,36 @@ public class ProceduralDungeon
                 }
             }
 
-
             // Connect Blocks (Priorty to start)
             foreach (List<Tuple<int, int>> Block in BlockList)
             {
                 var ConnectOrigin = new List<Path>();
                 var ConnectDiff = new List<Path>();
-                
-                foreach(Tuple<int, int> Room in Block)
+
+                foreach (Tuple<int, int> Room in Block)
                 {
                     int Row = Room.Item1;
                     int Col = Room.Item2;
 
-                    if ((Row != 0) && !(Dungeon[Row, Col].Up) && (Dungeon[Row, Col].Visit != Dungeon[Row-1, Col].Visit))
+                    if ((Row != 0) && !(Dungeon[Row, Col].Up) && (Dungeon[Row, Col].Visit != Dungeon[Row - 1, Col].Visit))
                     {
                         if (Dungeon[Row - 1, Col].Visit == 1) ConnectOrigin.Add(new Path(Room, 1));
                         else ConnectDiff.Add(new Path(Room, 1));
                     }
 
-                    if ((Row != r-1) && !(Dungeon[Row, Col].Down) && (Dungeon[Row, Col].Visit != Dungeon[Row+1, Col].Visit))
+                    if ((Row != r - 1) && !(Dungeon[Row, Col].Down) && (Dungeon[Row, Col].Visit != Dungeon[Row + 1, Col].Visit))
                     {
                         if (Dungeon[Row + 1, Col].Visit == 1) ConnectOrigin.Add(new Path(Room, 2));
                         else ConnectDiff.Add(new Path(Room, 2));
                     }
 
-                    if ((Col != 0) && !(Dungeon[Row, Col].Left) && (Dungeon[Row, Col].Visit != Dungeon[Row, Col-1].Visit))
+                    if ((Col != 0) && !(Dungeon[Row, Col].Left) && (Dungeon[Row, Col].Visit != Dungeon[Row, Col - 1].Visit))
                     {
                         if (Dungeon[Row, Col - 1].Visit == 1) ConnectOrigin.Add(new Path(Room, 3));
                         else ConnectDiff.Add(new Path(Room, 3));
                     }
 
-                    if ((Col != c-1) && !(Dungeon[Row, Col].Down) && (Dungeon[Row, Col].Visit != Dungeon[Row, Col+1].Visit))
+                    if ((Col != c - 1) && !(Dungeon[Row, Col].Down) && (Dungeon[Row, Col].Visit != Dungeon[Row, Col + 1].Visit))
                     {
                         if (Dungeon[Row, Col + 1].Visit == 1) ConnectOrigin.Add(new Path(Room, 4));
                         else ConnectDiff.Add(new Path(Room, 4));
@@ -213,12 +213,30 @@ public class ProceduralDungeon
                     }
                 }
             }
-            
 
-            // Clear Blocks
-            ClearSearch();
-            BlockList.Clear();
-            SearchNum = 1;
+
+        // Clear Blocks
+        ClearSearch();
+        BlockList.Clear();
+        SearchNum = 1;
+        } while (!Search(StartRow, StartCol, SearchNum));
+
+        // Determine big rooms
+        for (int i = 0; i < (r - 1); ++i)
+        {
+            for (int j = 0; j < (c - 1); ++j)
+            {
+                if (Dungeon[i, j].Status == 'O' && Dungeon[i + 1, j].Status == 'O' && Dungeon[i, j + 1].Status == 'O' && Dungeon[i + 1, j + 1].Status == 'O')
+                {
+                    if (Dungeon[i, j].Right && Dungeon[i, j].Down && Dungeon[i + 1, j + 1].Up && Dungeon[i + 1, j + 1].Left)
+                    {
+                        Dungeon[i, j].Status = 'B';
+                        Dungeon[i + 1, j].Status = 'B';
+                        Dungeon[i, j + 1].Status = 'B';
+                        Dungeon[i + 1, j + 1].Status = 'B';
+                    }
+                }
+            }
         }
     }
 
@@ -235,7 +253,7 @@ public class ProceduralDungeon
 
             for (int j = 0; j < NumCol; ++j)
             {
-                if ((i == StartRow && j == StartCol) || (i == EndRow && j == EndCol))
+                if ((Dungeon[i,j].Status != 'O'))
                 {
                     if (Dungeon[i, j].Left) Console.Write($"-{Dungeon[i, j].Status}");
                     else Console.Write($" {Dungeon[i, j].Status}");
