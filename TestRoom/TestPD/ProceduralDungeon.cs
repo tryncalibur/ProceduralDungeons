@@ -226,6 +226,17 @@ public class ProceduralDungeon
         {
             for (int j = 0; j < (c - 1); ++j)
             {
+                if (Dungeon[i, j].Status == 'O')
+                {
+                    int check = 0;
+                    if (Dungeon[i, j].Left) ++check;
+                    if (Dungeon[i, j].Right) ++check;
+                    if (Dungeon[i, j].Up) ++check;
+                    if (Dungeon[i, j].Down) ++check;
+
+                    if (check == 1) Dungeon[i, j].Status = 'D';
+                }
+
                 if (Dungeon[i, j].Status == 'O' && Dungeon[i + 1, j].Status == 'O' && Dungeon[i, j + 1].Status == 'O' && Dungeon[i + 1, j + 1].Status == 'O')
                 {
                     if (Dungeon[i, j].Right && Dungeon[i, j].Down && Dungeon[i + 1, j + 1].Up && Dungeon[i + 1, j + 1].Left)
