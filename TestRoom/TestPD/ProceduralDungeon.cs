@@ -101,16 +101,19 @@ public class ProceduralDungeon
         StartRow = rnd.Next(r);
         StartCol = rnd.Next(c);
         Dungeon[StartRow, StartCol].Status = 'S';
-        while (true)
-        {
-            EndRow = rnd.Next(r);
-            EndCol = rnd.Next(c);
-            if (StartRow != EndRow || StartCol != EndCol)
-            {
-                Dungeon[EndRow, EndCol].Status = 'E';
-                break;
-            }
-        }
+
+        if (StartRow > r/2)
+            EndRow = rnd.Next((int)(r / 2));
+        else
+            EndRow = rnd.Next((int)(r / 2) + 1, r);
+
+        if (StartCol > c/2)
+            EndCol = rnd.Next((int)(c / 2));
+        else
+            EndCol = rnd.Next((int)(c / 2) + 1, r);
+    
+        Dungeon[EndRow, EndCol].Status = 'E';
+
 
         // Connect rooms based on entrances
         for (int i = 0; i < r; ++i)
@@ -237,7 +240,7 @@ public class ProceduralDungeon
                     if (check == 1) Dungeon[i, j].Status = 'D';
                 }
 
-                if (Dungeon[i, j].Status == 'O' && Dungeon[i + 1, j].Status == 'O' && Dungeon[i, j + 1].Status == 'O' && Dungeon[i + 1, j + 1].Status == 'O')
+                else if (Dungeon[i, j].Status == 'O' && Dungeon[i + 1, j].Status == 'O' && Dungeon[i, j + 1].Status == 'O' && Dungeon[i + 1, j + 1].Status == 'O')
                 {
                     if (Dungeon[i, j].Right && Dungeon[i, j].Down && Dungeon[i + 1, j + 1].Up && Dungeon[i + 1, j + 1].Left)
                     {
