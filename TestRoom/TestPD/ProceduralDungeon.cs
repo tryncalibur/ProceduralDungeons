@@ -59,20 +59,16 @@ public class ProceduralDungeon
 
     public room[,] Dungeon
     { get; }
-    private int NumRow;
-    private int NumCol;
-    private int StartRow;
-    private int StartCol;
-    private int EndRow;
-    private int EndCol;
+    private Tuple<int, int> MaxRC;
+    private Tuple<int, int> Start;
+    private Tuple<int, int> End;
 
     private List<List<Tuple<int, int>>> BlockList = new List<List<Tuple<int, int>>>();
     private List<Tuple<int, int>> Temp = new List<Tuple<int, int>>();
 
     public ProceduralDungeon(int r = 5, int c = 5)
     {
-        NumRow = r;
-        NumCol = c;
+        MaxRC = new Tuple<int, int>(r, c);
 
         // Generate all rooms
         Dungeon = new room[r, c];
@@ -98,20 +94,21 @@ public class ProceduralDungeon
 
         // Set Start/End
         Random rnd = new Random();
-        StartRow = rnd.Next(r);
-        StartCol = rnd.Next(c);
-        Dungeon[StartRow, StartCol].Status = 'S';
+        Start = new Tuple<int, int>(rnd.Next(r), rnd.Next(c));
+        Dungeon[Start.Item1, Start.Item2].Status = 'S';
 
-        if (StartRow > r/2)
+        int EndRow; int EndCol;
+        if (Start.Item1 > r/2)
             EndRow = rnd.Next((int)(r / 2));
         else
             EndRow = rnd.Next((int)(r / 2) + 1, r);
 
-        if (StartCol > c/2)
+        if (Start.Item2 > c/2)
             EndCol = rnd.Next((int)(c / 2));
         else
             EndCol = rnd.Next((int)(c / 2) + 1, r);
-    
+        End = new Tuple<int, int>(EndRow, EndCol);
+
         Dungeon[EndRow, EndCol].Status = 'E';
 
 
@@ -129,7 +126,7 @@ public class ProceduralDungeon
 
         // Determine number of independent blocks
         int SearchNum = 1;
-        Search(StartRow, StartCol, SearchNum);
+        Search(Start.Item1, Start.Item2, SearchNum);
         do
         {
             Temp.Clear();
@@ -222,12 +219,13 @@ public class ProceduralDungeon
         ClearSearch();
         BlockList.Clear();
         SearchNum = 1;
-        } while (!Search(StartRow, StartCol, SearchNum));
+        } while (!Search(Start.Item1, Start.Item2, SearchNum));
 
-        // Determine big rooms
-        for (int i = 0; i < (r - 1); ++i)
+
+        // Give Attribute status to room based on entrances/sizes
+        for (int i = 0; i < (r); ++i)
         {
-            for (int j = 0; j < (c - 1); ++j)
+            for (int j = 0; j < (c); ++j)
             {
                 if (Dungeon[i, j].Status == 'O')
                 {
@@ -240,7 +238,7 @@ public class ProceduralDungeon
                     if (check == 1) Dungeon[i, j].Status = 'D';
                 }
 
-                else if (Dungeon[i, j].Status == 'O' && Dungeon[i + 1, j].Status == 'O' && Dungeon[i, j + 1].Status == 'O' && Dungeon[i + 1, j + 1].Status == 'O')
+                if ((i != r-1 && j != c-1) && Dungeon[i, j].Status == 'O' && Dungeon[i + 1, j].Status == 'O' && Dungeon[i, j + 1].Status == 'O' && Dungeon[i + 1, j + 1].Status == 'O')
                 {
                     if (Dungeon[i, j].Right && Dungeon[i, j].Down && Dungeon[i + 1, j + 1].Up && Dungeon[i + 1, j + 1].Left)
                     {
@@ -256,16 +254,16 @@ public class ProceduralDungeon
 
     public void PrintPD()
     {
-        for (int i = 0; i < NumRow; ++i)
+        for (int i = 0; i < MaxRC.Item1; ++i)
         {
-            for (int j = 0; j < NumCol; ++j)
+            for (int j = 0; j < MaxRC.Item2; ++j)
             {
                 if (Dungeon[i, j].Up) Console.Write(" | ");
                 else Console.Write("   ");
             }
             Console.Write("\n");
 
-            for (int j = 0; j < NumCol; ++j)
+            for (int j = 0; j < MaxRC.Item2; ++j)
             {
                 if ((Dungeon[i,j].Status != 'O'))
                 {
@@ -282,7 +280,7 @@ public class ProceduralDungeon
             }
             Console.Write("\n");
 
-            for (int j = 0; j < NumCol; ++j)
+            for (int j = 0; j < MaxRC.Item2; ++j)
             {
                 if (Dungeon[i, j].Down) Console.Write(" | ");
                 else Console.Write("   ");
@@ -318,9 +316,9 @@ public class ProceduralDungeon
     // Clear Visit marks
     private void ClearSearch()
     {
-        for (int i = 0; i < NumRow; ++i)
+        for (int i = 0; i < MaxRC.Item1; ++i)
         {
-            for (int j = 0; j < NumCol; ++j)
+            for (int j = 0; j < MaxRC.Item2; ++j)
             {
                 Dungeon[i, j].Visit = 0;
             }
