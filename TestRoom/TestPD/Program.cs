@@ -3,7 +3,7 @@
 namespace TestPD{
     class Program{
         static void Main(string[] args){
-            ProceduralDungeon d = new ProceduralDungeon(5, 5);
+            ProceduralDungeon d = new ProceduralDungeon(10, 10);
             d.PrintPD();
         }
     }

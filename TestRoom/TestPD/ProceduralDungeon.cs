@@ -227,6 +227,7 @@ public class ProceduralDungeon
         {
             for (int j = 0; j < (c); ++j)
             {
+                // Check DeadEnd
                 if (Dungeon[i, j].Status == 'O')
                 {
                     int check = 0;
@@ -237,10 +238,14 @@ public class ProceduralDungeon
 
                     if (check == 1) Dungeon[i, j].Status = 'D';
                 }
-
-                if ((i != r-1 && j != c-1) && Dungeon[i, j].Status == 'O' && Dungeon[i + 1, j].Status == 'O' && Dungeon[i, j + 1].Status == 'O' && Dungeon[i + 1, j + 1].Status == 'O')
+                
+                // Check Big Room (2x2 connected rooms)(Mult Big Rooms can be connected)
+                if (i < r-1 && j < c-1)
                 {
-                    if (Dungeon[i, j].Right && Dungeon[i, j].Down && Dungeon[i + 1, j + 1].Up && Dungeon[i + 1, j + 1].Left)
+                    bool x = Dungeon[i, j].Status != 'S' && Dungeon[i + 1, j].Status != 'S' && Dungeon[i, j + 1].Status != 'S' && Dungeon[i + 1, j + 1].Status != 'S' &&
+                    Dungeon[i, j].Status != 'E' && Dungeon[i + 1, j].Status != 'E' && Dungeon[i, j + 1].Status != 'E' && Dungeon[i + 1, j + 1].Status != 'E';
+                    
+                    if (x && Dungeon[i, j].Right && Dungeon[i, j].Down && Dungeon[i + 1, j + 1].Up && Dungeon[i + 1, j + 1].Left)
                     {
                         Dungeon[i, j].Status = 'B';
                         Dungeon[i + 1, j].Status = 'B';
@@ -258,31 +263,36 @@ public class ProceduralDungeon
         {
             for (int j = 0; j < MaxRC.Item2; ++j)
             {
-                if (Dungeon[i, j].Up) Console.Write(" | ");
+                if (Dungeon[i, j].Up && Dungeon[i, j].Visit != 0) Console.Write(" | ");
                 else Console.Write("   ");
             }
             Console.Write("\n");
 
             for (int j = 0; j < MaxRC.Item2; ++j)
             {
-                if ((Dungeon[i,j].Status != 'O'))
+               if ((Dungeon[i,j].Status != 'O'))
                 {
-                    if (Dungeon[i, j].Left) Console.Write($"-{Dungeon[i, j].Status}");
+                    if (Dungeon[i, j].Visit == 0) Console.Write("  ");
+                    else if (Dungeon[i, j].Left) Console.Write($"-{Dungeon[i, j].Status}");
                     else Console.Write($" {Dungeon[i, j].Status}");
                 }
                 else
                 {
-                    if (Dungeon[i, j].Left) Console.Write($"-{Dungeon[i, j].Visit}");
-                    else Console.Write($" {Dungeon[i, j].Visit}");
+                    if (Dungeon[i, j].Visit == 0)Console.Write("  ");
+                    else
+                    {
+                        if (Dungeon[i, j].Left) Console.Write($"-{Dungeon[i, j].Visit}");
+                        else Console.Write($" {Dungeon[i, j].Visit}");
+                    }
                 }
-                if (Dungeon[i, j].Right) Console.Write("-");
+                if (Dungeon[i, j].Right && Dungeon[i, j].Visit != 0) Console.Write("-");
                 else Console.Write(" ");
             }
             Console.Write("\n");
 
             for (int j = 0; j < MaxRC.Item2; ++j)
             {
-                if (Dungeon[i, j].Down) Console.Write(" | ");
+                if (Dungeon[i, j].Down && Dungeon[i, j].Visit != 0) Console.Write(" | ");
                 else Console.Write("   ");
             }
             Console.Write("\n");
