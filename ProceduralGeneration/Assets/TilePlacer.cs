@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TilePlacer : MonoBehaviour
 {
@@ -12,11 +10,28 @@ public class TilePlacer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Vector3 pos = new Vector3(0, 0, 0);
-        Instantiate(BuildingBlocks[0], pos, Quaternion.identity);
+        ProceduralDungeon PD = new ProceduralDungeon(rows, cols);
+        var dungeon = PD.Dungeon;
 
-        Vector3 pos2 = new Vector3(footprint, 0, footprint);
-        Instantiate(BuildingBlocks[0], pos2, Quaternion.identity);
+        for (int i = 0; i < rows; ++i)
+        {
+            for (int j = 0; j < cols; ++j)
+            {
+                Debug.Log($"{dungeon[i,j].Visit}");
+                // Big Room
+                if (dungeon[i, j].Visit == 1 && dungeon[i, j].Status == 'B')
+                {
+                    Vector3 pos = new Vector3(i * footprint, 0, j * footprint);
+                    Instantiate(BuildingBlocks[0], pos, Quaternion.identity);
+                }
+                // Small Room
+                else if (dungeon[i, j].Visit == 1)
+                {
+                    Vector3 pos = new Vector3(i * footprint + 5, 0, j * footprint - 5);
+                    Instantiate(BuildingBlocks[3], pos, Quaternion.identity);
+                }
+            }
+        }
     }
 
     // Update is called once per frame
@@ -25,3 +40,4 @@ public class TilePlacer : MonoBehaviour
         
     }
 }
+
