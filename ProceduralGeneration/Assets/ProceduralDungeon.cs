@@ -1,7 +1,6 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+
 
 public class ProceduralDungeon
 {
@@ -257,46 +256,48 @@ public class ProceduralDungeon
         }
     }
 
-    public void PrintPD()
+    public string PrintPD()
     {
+        string PrintedDungeon = "";
         for (int i = 0; i < MaxRC.Item1; ++i)
         {
             for (int j = 0; j < MaxRC.Item2; ++j)
             {
-                if (Dungeon[i, j].Up && Dungeon[i, j].Visit != 0) Console.Write(" | ");
-                else Console.Write("   ");
+                if (Dungeon[i, j].Up && Dungeon[i, j].Visit != 0) PrintedDungeon+="  |  ";
+                else PrintedDungeon += "     ";
             }
-            Console.Write("\n");
+            PrintedDungeon += "\n";
 
             for (int j = 0; j < MaxRC.Item2; ++j)
             {
                if ((Dungeon[i,j].Status != 'O'))
                 {
-                    if (Dungeon[i, j].Visit == 0) Console.Write("  ");
-                    else if (Dungeon[i, j].Left) Console.Write($"-{Dungeon[i, j].Status}");
-                    else Console.Write($" {Dungeon[i, j].Status}");
+                    if (Dungeon[i, j].Visit == 0) PrintedDungeon += "   ";
+                    else if (Dungeon[i, j].Left) PrintedDungeon += $"-{Dungeon[i, j].Status}";
+                    else PrintedDungeon += $"  {Dungeon[i, j].Status}";
                 }
                 else
                 {
-                    if (Dungeon[i, j].Visit == 0)Console.Write("  ");
+                    if (Dungeon[i, j].Visit == 0) PrintedDungeon += "   ";
                     else
                     {
-                        if (Dungeon[i, j].Left) Console.Write($"-{Dungeon[i, j].Visit}");
-                        else Console.Write($" {Dungeon[i, j].Visit}");
+                        if (Dungeon[i, j].Left) PrintedDungeon += $"-{Dungeon[i, j].Visit}";
+                        else PrintedDungeon += $"  {Dungeon[i, j].Visit}";
                     }
                 }
-                if (Dungeon[i, j].Right && Dungeon[i, j].Visit != 0) Console.Write("-");
-                else Console.Write(" ");
+                if (Dungeon[i, j].Right && Dungeon[i, j].Visit != 0) PrintedDungeon += "-";
+                else PrintedDungeon += "  ";
             }
-            Console.Write("\n");
+            PrintedDungeon += "\n";
 
             for (int j = 0; j < MaxRC.Item2; ++j)
             {
-                if (Dungeon[i, j].Down && Dungeon[i, j].Visit != 0) Console.Write(" | ");
-                else Console.Write("   ");
+                if (Dungeon[i, j].Down && Dungeon[i, j].Visit != 0) PrintedDungeon += "  |  ";
+                else PrintedDungeon += "     ";
             }
-            Console.Write("\n");
+            PrintedDungeon += "\n";
         }
+        return PrintedDungeon;
     }
     
     // Find connected blocks of dungeon
