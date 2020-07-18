@@ -26,10 +26,10 @@ public class ProceduralDungeon
 
         public room()
         {
-            Up = rnd.Next(4) == 0;
-            Down = rnd.Next(4) == 0;
-            Left = rnd.Next(4) == 0;
-            Right = rnd.Next(4) == 0;
+            Up = rnd.Next(3) == 0;
+            Down = rnd.Next(3) == 0;
+            Left = rnd.Next(3) == 0;
+            Right = rnd.Next(3) == 0;
             Status = 'O';
             Visit = 0;
         }
@@ -125,8 +125,8 @@ public class ProceduralDungeon
 
         // Determine number of independent blocks
         int SearchNum = 1;
-        Search(Start.Item1, Start.Item2, SearchNum);
-        do
+ 
+        while(!Search(Start.Item1, Start.Item2, SearchNum))
         {
             Temp.Clear();
 
@@ -218,7 +218,7 @@ public class ProceduralDungeon
         ClearSearch();
         BlockList.Clear();
         SearchNum = 1;
-        } while (!Search(Start.Item1, Start.Item2, SearchNum));
+        } 
 
 
         // Give Attribute status to room based on entrances/sizes

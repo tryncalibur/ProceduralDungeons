@@ -14,9 +14,9 @@ public class TilePlacer : MonoBehaviour
         var dungeon = PD.Dungeon;
         Debug.Log(PD.PrintPD());
 
-        for (int i = 0; i < rows; ++i)
+        for (int i = 0; i < cols; ++i)
         {
-            for (int j = 0; j < cols; ++j)
+            for (int j = 0; j < rows; ++j)
             {
                 int r = rows - j - 1;
                 int c = i;
