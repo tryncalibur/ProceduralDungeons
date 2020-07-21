@@ -25,6 +25,21 @@ public class TilePlacer : MonoBehaviour
                 {
                     Vector3 pos = new Vector3(i * footprint, 0, j * footprint);
                     Instantiate(BuildingBlocks[0], pos, Quaternion.identity);
+
+                    if (!dungeon[r, c].Up) Instantiate(BuildingBlocks[1], pos, Quaternion.identity);
+                    else if (dungeon[r, c].Up && dungeon[r - 1, c].Status != 'B') Instantiate(BuildingBlocks[2], pos, Quaternion.identity);
+
+                    if (!dungeon[r, c].Left) Instantiate(BuildingBlocks[1], pos, Quaternion.AngleAxis(90, Vector3.up));
+                    else if (dungeon[r, c].Left && dungeon[r, c - 1].Status != 'B') Instantiate(BuildingBlocks[2], pos, Quaternion.AngleAxis(90, Vector3.up));
+
+                    Vector3 pos2 = new Vector3(i * footprint + 30, 0, j * footprint);
+                    if (!dungeon[r, c].Right) Instantiate(BuildingBlocks[1], pos2, Quaternion.AngleAxis(90, Vector3.up));
+                    else if (dungeon[r, c].Right && dungeon[r, c + 1].Status != 'B') Instantiate(BuildingBlocks[2], pos2, Quaternion.AngleAxis(90, Vector3.up));
+
+                    Vector3 pos1 = new Vector3(i * footprint, 0, j * footprint - 30);
+                    if (!dungeon[r, c].Down) Instantiate(BuildingBlocks[1], pos1, Quaternion.identity);
+                    else if (dungeon[r, c].Down && dungeon[r + 1, c].Status != 'B') Instantiate(BuildingBlocks[2], pos1, Quaternion.identity);
+
                 }
                 // Small Room
                 else if (dungeon[r, c].Visit == 1)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 
 public class ProceduralDungeon
@@ -8,7 +9,6 @@ public class ProceduralDungeon
     // Data about each room Mapwise
     public class room
     {
-        Random rnd = new Random();
         public bool Up
         { get; set; }
         public bool Down
@@ -26,10 +26,10 @@ public class ProceduralDungeon
 
         public room()
         {
-            Up = rnd.Next(3) == 0;
-            Down = rnd.Next(3) == 0;
-            Left = rnd.Next(3) == 0;
-            Right = rnd.Next(3) == 0;
+            Up = UnityEngine.Random.Range(0, 4) == 0;
+            Down = UnityEngine.Random.Range(0, 4) == 0;
+            Left = UnityEngine.Random.Range(0, 4) == 0;
+            Right = UnityEngine.Random.Range(0, 4) == 0;
             Status = 'O';
             Visit = 0;
         }
@@ -92,20 +92,19 @@ public class ProceduralDungeon
         }
 
         // Set Start/End
-        Random rnd = new Random();
-        Start = new Tuple<int, int>(rnd.Next(r), rnd.Next(c));
+        Start = new Tuple<int, int>(UnityEngine.Random.Range(0, r), UnityEngine.Random.Range(0, c));
         Dungeon[Start.Item1, Start.Item2].Status = 'S';
 
         int EndRow; int EndCol;
-        if (Start.Item1 > r/2)
-            EndRow = rnd.Next((int)(r / 2));
+        if (Start.Item1 > r / 2)
+            EndRow = UnityEngine.Random.Range(0, (int)(r / 2)); 
         else
-            EndRow = rnd.Next((int)(r / 2) + 1, r);
+            EndRow = UnityEngine.Random.Range((int)(r / 2), r); 
 
         if (Start.Item2 > c/2)
-            EndCol = rnd.Next((int)(c / 2));
+            EndCol = UnityEngine.Random.Range(0, (int)(c / 2));  
         else
-            EndCol = rnd.Next((int)(c / 2) + 1, r);
+            EndCol = UnityEngine.Random.Range((int)(c / 2), c);  
         End = new Tuple<int, int>(EndRow, EndCol);
 
         Dungeon[EndRow, EndCol].Status = 'E';
@@ -184,8 +183,8 @@ public class ProceduralDungeon
                 if (ConnectDiff.Count != 0 || ConnectOrigin.Count != 0)
                 {
                     Path MakeConnect = new Path(-1, -1, -1);
-                    if (ConnectDiff.Count != 0) MakeConnect = ConnectDiff[rnd.Next(ConnectDiff.Count)];
-                    if (ConnectOrigin.Count != 0) MakeConnect = ConnectOrigin[rnd.Next(ConnectOrigin.Count)];
+                    if (ConnectDiff.Count != 0) MakeConnect = ConnectDiff[UnityEngine.Random.Range(0, ConnectDiff.Count)]; 
+                    if (ConnectOrigin.Count != 0) MakeConnect = ConnectOrigin[UnityEngine.Random.Range(0, ConnectOrigin.Count)]; 
 
                     // Connect two blocks
                     switch (MakeConnect.Direction)
