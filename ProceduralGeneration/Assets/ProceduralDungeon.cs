@@ -277,7 +277,7 @@ public class ProceduralDungeon
                 }
                 else
                 {
-                    if (Dungeon[i, j].Visit == 0) PrintedDungeon += "   ";
+                    if (Dungeon[i, j].Visit == 0) PrintedDungeon += "  ";
                     else
                     {
                         if (Dungeon[i, j].Left) PrintedDungeon += $"-{Dungeon[i, j].Visit}";

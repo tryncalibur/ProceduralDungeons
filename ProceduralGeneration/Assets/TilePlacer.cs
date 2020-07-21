@@ -2,7 +2,7 @@
 
 public class TilePlacer : MonoBehaviour
 {
-    public GameObject[] BuildingBlocks;
+    public GameObject[] BuildingBlocks; 
     public int rows = 5;
     public int cols = 5;
     private int footprint = 30;
@@ -23,9 +23,11 @@ public class TilePlacer : MonoBehaviour
                 // Big Room
                 if (dungeon[r, c].Visit == 1 && dungeon[r, c].Status == 'B')
                 {
+                    // Add Floor
                     Vector3 pos = new Vector3(i * footprint, 0, j * footprint);
                     Instantiate(BuildingBlocks[0], pos, Quaternion.identity);
 
+                    // Add Walls
                     if (!dungeon[r, c].Up) Instantiate(BuildingBlocks[1], pos, Quaternion.identity);
                     else if (dungeon[r, c].Up && dungeon[r - 1, c].Status != 'B') Instantiate(BuildingBlocks[2], pos, Quaternion.identity);
 
@@ -44,9 +46,11 @@ public class TilePlacer : MonoBehaviour
                 // Small Room
                 else if (dungeon[r, c].Visit == 1)
                 {
+                    // Add Floor
                     Vector3 pos = new Vector3(i * footprint + 5, 0, j * footprint - 5);
                     Instantiate(BuildingBlocks[3], pos, Quaternion.identity);
 
+                    // Add Walls
                     Vector3 pos1 = new Vector3(i * footprint + 5, 0, j * footprint - 4);
                     if (dungeon[r, c].Up) Instantiate(BuildingBlocks[5], pos1, Quaternion.identity);
                     else Instantiate(BuildingBlocks[4], pos1, Quaternion.identity);
@@ -62,6 +66,26 @@ public class TilePlacer : MonoBehaviour
                     Vector3 pos4 = new Vector3(i * footprint + 25, 0, j * footprint - 26);
                     if (dungeon[r, c].Down) Instantiate(BuildingBlocks[5], pos4, Quaternion.AngleAxis(180, Vector3.up));
                     else Instantiate(BuildingBlocks[4], pos4, Quaternion.AngleAxis(180, Vector3.up));
+
+                    // Add Addons to small Dungeon
+                    switch (dungeon[r, c].Status)
+                    {
+                        case 'O':
+                            break;
+                        case 'D':
+                            break;
+                        case 'S':
+                            Vector3 S = new Vector3(i * footprint + 10, 0, j * footprint - 10);
+                            Instantiate(BuildingBlocks[6], S, Quaternion.identity);
+                            break;
+                        case 'E':
+                            Vector3 E = new Vector3(i * footprint + 10, 0, j * footprint - 10);
+                            Instantiate(BuildingBlocks[7], E, Quaternion.identity);
+                            break;
+                        default:
+                            Debug.Log($"Unexpected char in Dungeon.[{r}, {c}.Status]");
+                            break;
+                    }
                 }
             }
         }
