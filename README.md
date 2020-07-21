@@ -5,6 +5,6 @@ This program is currently designed to generate a nxm dungeon with randomly gener
 Currently, the program creates a nxm dungeon, places tile rooms with 2 varying sizes based off entrances, and adds walls with and without entrances. 
 
 Plans:
-Add indicator of start and finish
-Add landscape/objects in rooms randomly
+//Add indicator of start and finish// FINISHED
+Add landscape/objects in rooms randomly // INPROGRESS
 Add FP Pov player object
