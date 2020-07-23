@@ -26,10 +26,10 @@ public class ProceduralDungeon
 
         public room()
         {
-            Up = UnityEngine.Random.Range(0, 4) == 0;
-            Down = UnityEngine.Random.Range(0, 4) == 0;
-            Left = UnityEngine.Random.Range(0, 4) == 0;
-            Right = UnityEngine.Random.Range(0, 4) == 0;
+            Up = UnityEngine.Random.Range(0, 3) == 0;
+            Down = UnityEngine.Random.Range(0, 3) == 0;
+            Left = UnityEngine.Random.Range(0, 3) == 0;
+            Right = UnityEngine.Random.Range(0, 3) == 0;
             Status = 'O';
             Visit = 0;
         }

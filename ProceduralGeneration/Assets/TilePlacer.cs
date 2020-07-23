@@ -71,6 +71,13 @@ public class TilePlacer : MonoBehaviour
                     switch (dungeon[r, c].Status)
                     {
                         case 'O':
+                            int RNDSmall = UnityEngine.Random.Range(0, 10);
+                            Vector3 Small = new Vector3(i * footprint + 10, 0, j * footprint - 10);
+                            if (RNDSmall < 5) break;
+                            else if (RNDSmall < 5) Instantiate(BuildingBlocks[8], Small, Quaternion.identity);
+                            else if (RNDSmall < 6) Instantiate(BuildingBlocks[9], Small, Quaternion.identity);
+                            else if (RNDSmall < 7) Instantiate(BuildingBlocks[10], Small, Quaternion.identity);
+                            else if (RNDSmall < 8) Instantiate(BuildingBlocks[11], Small, Quaternion.identity);
                             break;
                         case 'D':
                             break;
